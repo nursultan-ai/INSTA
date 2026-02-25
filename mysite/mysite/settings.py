@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt.token_blacklist',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
+ASGI_APPLICATION = 'mysite.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 
 # Database

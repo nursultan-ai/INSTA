@@ -31,7 +31,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
-    list_display = ('follower', 'following', 'created_at')
+    list_display = ('follower', 'following', 'created_date')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

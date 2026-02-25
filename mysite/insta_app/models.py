@@ -23,7 +23,7 @@ class UserProfile(AbstractUser):
 class Follow(models.Model):
     follower = models.ForeignKey(UserProfile, related_name='following', on_delete=models.CASCADE)
     following = models.ForeignKey(UserProfile, related_name='followers', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('follower', 'following')
@@ -52,10 +52,10 @@ class PostContent(models.Model):
 class PostLike(models.Model):
     post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('post', 'user')
+        unique_together = ('user', 'post')
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
@@ -70,7 +70,10 @@ class Comment(models.Model):
 class CommentLike(models.Model):
     comment = models.ForeignKey(Comment, related_name='likes', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment')
 
 class Favorite(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='favorite_folder')
@@ -78,4 +81,17 @@ class Favorite(models.Model):
 class FavoriteItem(models.Model):
     favorite = models.ForeignKey(Favorite, related_name='items', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    added_at = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+class Chat(models.Model):
+    person = models.ManyToManyField(UserProfile)
+    created_date = models.DateField(auto_now_add=True)
+
+class Message(models.Model):
+    chat = models.ForeignKey(Chat,on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    text = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='images', null=True, blank=True)
+    video = models.FileField(upload_to='videos',null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
